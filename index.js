@@ -1,4 +1,48 @@
-import { UserManager } from './UserManager.js';
+#! /usr/bin/env node
+class User {
+    username;
+    password;
+    email;
+    constructor(username, password, email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+    getUsername() {
+        return this.username;
+    }
+    validatePassword(password) {
+        return this.password === password;
+    }
+    getEmail() {
+        return this.email;
+    }
+}
+export class UserManager {
+    users = [];
+    signup(username, password, email) {
+        if (this.users.find(user => user.getUsername() === username)) {
+            return 'Username already taken.';
+        }
+        const newUser = new User(username, password, email);
+        this.users.push(newUser);
+        return 'Signup successful!';
+    }
+    login(username, password) {
+        const user = this.users.find(user => user.getUsername() === username);
+        if (user && user.validatePassword(password)) {
+            return 'Login successful!';
+        }
+        return 'Invalid username or password.';
+    }
+    getUserDetails(username) {
+        const user = this.users.find(user => user.getUsername() === username);
+        if (user) {
+            return `Username: ${user.getUsername()}, Email: ${user.getEmail()}`;
+        }
+        return 'User not found.';
+    }
+}
 const userManager = new UserManager();
 // Signup new users
 console.log(userManager.signup('john_doe', 'password123', 'john@example.com'));
